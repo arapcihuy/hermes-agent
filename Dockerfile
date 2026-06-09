@@ -318,12 +318,10 @@ RUN mkdir -p /opt/data
 #   docker run <image> sleep infinity   → /init main-wrapper.sh sleep infinity
 #   docker run <image> --tui            → /init main-wrapper.sh --tui
 #
-# main-wrapper.sh handles arg routing (bare-exec vs. hermes
-# subcommand vs. no-args), drops to the hermes user via s6-setuidgid,
-# and exec's the final program so its exit code becomes the container
-# exit code. Without the wrapper-as-ENTRYPOINT, leading-dash args
-# like `--version` would be intercepted by /init's POSIX shell.
+# Override ENTRYPOINT for Railway — bypass s6-overlay, run gateway directly
+COPY --chmod=0755 docker/railway-entrypoint.sh /opt/hermes/docker/railway-entrypoint.sh
+# s6-overlay entrypoint (default for local docker):
 ENTRYPOINT [ "/init", "/opt/hermes/docker/main-wrapper.sh" ]
 CMD [ "hermes", "gateway", "start" ]
-# Fallback for Railway: if CMD override doesn't work, use railway-start.sh
-# via: railway variables set RAILWAY_DOCKERFILE_START_CMD="sh /opt/hermes/docker/railway-start.sh"
+# Railway override (set via railway variables):
+# RAILWAY_DOCKERFILE_START_CMD="/opt/hermes/docker/railway-entrypoint.sh"
