@@ -325,3 +325,5 @@ RUN mkdir -p /opt/data
 # like `--version` would be intercepted by /init's POSIX shell.
 ENTRYPOINT [ "/init", "/opt/hermes/docker/main-wrapper.sh" ]
 CMD [ "hermes", "gateway", "start" ]
+# Fallback for Railway: if CMD override doesn't work, use railway-start.sh
+# via: railway variables set RAILWAY_DOCKERFILE_START_CMD="sh /opt/hermes/docker/railway-start.sh"
