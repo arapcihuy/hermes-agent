@@ -1,0 +1,8 @@
+[build]
+builder = "nixpacks"
+
+[build.env]
+NODE_ENV = "production"
+
+[start]
+cmd = "hermes gateway start"
