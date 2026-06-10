@@ -3,7 +3,6 @@ set -ex
 
 mkdir -p /opt/data/.hermes
 
-# Minimal config
 cat > /opt/data/.hermes/config.yaml << EOF
 telegram:
   bot_token: ${TELEGRAM_BOT_TOKEN}
@@ -20,5 +19,5 @@ EOF
 echo "=== Config ==="
 cat /opt/data/.hermes/config.yaml
 
-echo "=== Gateway start ==="
-exec /opt/venv/bin/hermes gateway start
+echo "=== Gateway run (foreground) ==="
+exec /opt/venv/bin/hermes gateway run
