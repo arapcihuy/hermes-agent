@@ -19,5 +19,5 @@ EOF
 echo "=== Config ==="
 cat /opt/data/.hermes/config.yaml
 
-echo "=== Gateway run (foreground) ==="
+echo "=== Gateway run ==="
 exec /opt/venv/bin/hermes gateway run
