@@ -14,9 +14,13 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
+# Create virtual environment for Python
+RUN python3.12 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
 # Install Python dependencies
 COPY requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Install Node dependencies
 COPY package.json package-lock.json ./
@@ -28,8 +32,6 @@ COPY . .
 # Create data directory
 RUN mkdir -p /opt/data
 
-# Health check
 EXPOSE 8080
 
-# Start hermes gateway
 CMD ["npx", "hermes", "gateway", "start"]
