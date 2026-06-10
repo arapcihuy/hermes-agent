@@ -10,7 +10,6 @@ SECURITY.md
 docs/
 tests/
 scripts/
-Dockerfile
 docker/
 *.md
 nix/
