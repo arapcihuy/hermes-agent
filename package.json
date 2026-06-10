@@ -2,8 +2,11 @@
   "name": "hermes-railway",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
-    "start": "hermes gateway start"
+    "start": "npx hermes gateway start"
   },
   "dependencies": {
     "hermes-agent": "0.16.0"
