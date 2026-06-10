@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-echo "=== Hermes Railway Startup ==="
+echo "=== Hermes Railway Startup ===" | tee /opt/data/.hermes/startup.log
 mkdir -p /opt/data/.hermes
 
 cat > /opt/data/.hermes/config.yaml << 'YAMLEOF'
@@ -22,8 +22,11 @@ sed -i "s/TOKEN_PLACEHOLDER/${TELEGRAM_BOT_TOKEN}/g" /opt/data/.hermes/config.ya
 sed -i "s/CHATS_PLACEHOLDER/${TELEGRAM_ALLOWED_CHATS}/g" /opt/data/.hermes/config.yaml
 sed -i "s/KEY_PLACEHOLDER/${OPENROUTER_API_KEY}/g" /opt/data/.hermes/config.yaml
 
-echo "=== Config ==="
-cat /opt/data/.hermes/config.yaml
+echo "=== Config ===" | tee -a /opt/data/.hermes/startup.log
+cat /opt/data/.hermes/config.yaml | tee -a /opt/data/.hermes/startup.log
 
-echo "=== Starting gateway ==="
-exec /opt/venv/bin/hermes gateway start 2>&1
+echo "=== Hermes version ===" | tee -a /opt/data/.hermes/startup.log
+/opt/venv/bin/hermes --version 2>&1 | tee -a /opt/data/.hermes/startup.log
+
+echo "=== Starting gateway ===" | tee -a /opt/data/.hermes/startup.log
+exec /opt/venv/bin/hermes gateway start 2>&1 | tee -a /opt/data/.hermes/startup.log
