@@ -1,32 +1,34 @@
 #!/bin/bash
-set -e
+set -ex
 
 echo "=== Hermes Railway Startup ==="
-
-# Create .hermes directory
 mkdir -p /opt/data/.hermes
 
-# Generate config.yaml from Railway environment variables
-cat > /opt/data/.hermes/config.yaml << EOF
+cat > /opt/data/.hermes/config.yaml << 'YAMLEOF'
 telegram:
-  bot_token: "${TELEGRAM_BOT_TOKEN}"
-  allowed_chats: "${TELEGRAM_ALLOWED_CHATS}"
+  bot_token: "TOKEN_PLACEHOLDER"
+  allowed_chats: "CHATS_PLACEHOLDER"
   streaming: true
 model:
-  default: "${HERMES_MODEL:-openrouter/owl-alpha}"
+  default: "openrouter/owl-alpha"
   provider: openrouter
 providers:
   openrouter:
     base_url: https://openrouter.ai/api/v1
-    api_key: "${OPENROUTER_API_KEY}"
-EOF
+    api_key: "KEY_PLACEHOLDER"
+YAMLEOF
 
-echo "=== Config generated ==="
+# Replace placeholders with actual env vars
+sed -i "s/TOKEN_PLACEHOLDER/${TELEGRAM_BOT_TOKEN}/g" /opt/data/.hermes/config.yaml
+sed -i "s/CHATS_PLACEHOLDER/${TELEGRAM_ALLOWED_CHATS}/g" /opt/data/.hermes/config.yaml
+sed -i "s/KEY_PLACEHOLDER/${OPENROUTER_API_KEY}/g" /opt/data/.hermes/config.yaml
+
+echo "=== Config ==="
 cat /opt/data/.hermes/config.yaml
-echo "=== Checking hermes binary ==="
-ls -la node_modules/hermes-agent/bin/ 2>/dev/null || echo "bin dir not found"
-ls -la node_modules/.bin/hermes 2>/dev/null || echo "hermes bin not found"
-echo "=== Starting hermes gateway ==="
 
-# Start hermes gateway with debug
-exec node node_modules/hermes-agent/bin/hermes.js gateway start 2>&1
+echo "=== Python venv ==="
+ls -la /opt/venv/bin/python* 2>/dev/null || echo "no python in venv"
+/opt/venv/bin/python3 --version 2>/dev/null || echo "python not working"
+
+echo "=== Starting gateway ==="
+exec /opt/venv/bin/python3 -m hermes_agent gateway start 2>&1
