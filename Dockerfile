@@ -25,6 +25,10 @@ RUN npm ci --omit=dev
 COPY . .
 RUN mkdir -p /opt/data
 
+# Copy startup script
+COPY start.sh /opt/start.sh
+RUN chmod +x /opt/start.sh
+
 EXPOSE 8080
 
-CMD ["node", "node_modules/hermes-agent/bin/hermes.js", "gateway", "start"]
+CMD ["/opt/start.sh"]
