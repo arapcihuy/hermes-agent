@@ -2,6 +2,7 @@ FROM ubuntu:24.04
 
 ENV PYTHONUNBUFFERED=1
 ENV NODE_ENV=production
+ENV HOME=/opt/data
 
 # Install Python 3.12 + Node.js 20
 RUN apt-get update && apt-get install -y \
@@ -11,7 +12,6 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y nodejs \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Create app directory
 WORKDIR /app
 
 # Install Python dependencies first (cached layer)
@@ -25,7 +25,9 @@ RUN npm ci --omit=dev
 # Copy source
 COPY . .
 
-# Expose port (health check)
+# Create data directory
+RUN mkdir -p /opt/data
+
 EXPOSE 8080
 
-CMD ["npx", "hermes", "gateway", "start"]
+CMD ["node", "node_modules/.bin/hermes", "gateway", "start"]
