@@ -4,6 +4,7 @@ set -ex
 echo "=== Hermes Railway Startup ==="
 mkdir -p /opt/data/.hermes
 
+# Generate config
 cat > /opt/data/.hermes/config.yaml << 'YAMLEOF'
 telegram:
   bot_token: "TOKEN_PLACEHOLDER"
@@ -18,7 +19,6 @@ providers:
     api_key: "KEY_PLACEHOLDER"
 YAMLEOF
 
-# Replace placeholders with actual env vars
 sed -i "s/TOKEN_PLACEHOLDER/${TELEGRAM_BOT_TOKEN}/g" /opt/data/.hermes/config.yaml
 sed -i "s/CHATS_PLACEHOLDER/${TELEGRAM_ALLOWED_CHATS}/g" /opt/data/.hermes/config.yaml
 sed -i "s/KEY_PLACEHOLDER/${OPENROUTER_API_KEY}/g" /opt/data/.hermes/config.yaml
@@ -26,9 +26,11 @@ sed -i "s/KEY_PLACEHOLDER/${OPENROUTER_API_KEY}/g" /opt/data/.hermes/config.yaml
 echo "=== Config ==="
 cat /opt/data/.hermes/config.yaml
 
-echo "=== Python venv ==="
-ls -la /opt/venv/bin/python* 2>/dev/null || echo "no python in venv"
-/opt/venv/bin/python3 --version 2>/dev/null || echo "python not working"
+echo "=== Checking hermes package ==="
+pip show hermes-agent 2>&1 | head -5
+echo "---"
+python3 -c "from hermes_cli.main import main; print('hermes_cli OK')" 2>&1 || echo "import failed"
 
 echo "=== Starting gateway ==="
-exec /opt/venv/bin/python3 -m hermes_agent gateway start 2>&1
+# Use the hermes CLI entry point
+exec python3 -m hermes_cli gateway start 2>&1
