@@ -3,6 +3,12 @@ set -ex
 
 mkdir -p /opt/data/.hermes
 
+# Generate .env file with API keys
+cat > /opt/data/.hermes/.env << EOF
+OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+EOF
+
+# Generate config.yaml
 cat > /opt/data/.hermes/config.yaml << EOF
 telegram:
   bot_token: ${TELEGRAM_BOT_TOKEN}
@@ -13,8 +19,10 @@ model:
 providers:
   openrouter:
     base_url: https://openrouter.ai/api/v1
-    api_key: ${OPENROUTER_API_KEY}
 EOF
+
+echo "=== .env ==="
+cat /opt/data/.hermes/.env
 
 echo "=== Config ==="
 cat /opt/data/.hermes/config.yaml
