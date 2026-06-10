@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Create .hermes directory
+mkdir -p /opt/data/.hermes
+
 # Generate config.yaml from Railway environment variables
 cat > /opt/data/.hermes/config.yaml << EOF
 telegram:
@@ -17,7 +20,6 @@ providers:
 EOF
 
 echo "Config generated. Starting hermes gateway..."
-cat /opt/data/.hermes/config.yaml
 
 # Start hermes gateway
 exec node node_modules/hermes-agent/bin/hermes.js gateway start
