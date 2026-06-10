@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+echo "=== Hermes Railway Startup ==="
+
 # Create .hermes directory
 mkdir -p /opt/data/.hermes
 
@@ -19,7 +21,12 @@ providers:
     api_key: "${OPENROUTER_API_KEY}"
 EOF
 
-echo "Config generated. Starting hermes gateway..."
+echo "=== Config generated ==="
+cat /opt/data/.hermes/config.yaml
+echo "=== Checking hermes binary ==="
+ls -la node_modules/hermes-agent/bin/ 2>/dev/null || echo "bin dir not found"
+ls -la node_modules/.bin/hermes 2>/dev/null || echo "hermes bin not found"
+echo "=== Starting hermes gateway ==="
 
-# Start hermes gateway
-exec node node_modules/hermes-agent/bin/hermes.js gateway start
+# Start hermes gateway with debug
+exec node node_modules/hermes-agent/bin/hermes.js gateway start 2>&1
