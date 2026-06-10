@@ -3,28 +3,22 @@ set -ex
 
 mkdir -p /opt/data/.hermes
 
-echo "=== Hermes Railway Startup ===" | tee /opt/data/.hermes/startup.log
-
-cat > /opt/data/.hermes/config.yaml << 'YAMLEOF'
+# Minimal config
+cat > /opt/data/.hermes/config.yaml << EOF
 telegram:
-  bot_token: "TOKEN_PLACEHOLDER"
-  allowed_chats: "CHATS_PLACEHOLDER"
-  streaming: true
+  bot_token: ${TELEGRAM_BOT_TOKEN}
+  allowed_chats: ${TELEGRAM_ALLOWED_CHATS}
 model:
-  default: "openrouter/owl-alpha"
+  default: openrouter/owl-alpha
   provider: openrouter
 providers:
   openrouter:
     base_url: https://openrouter.ai/api/v1
-    api_key: "KEY_PLACEHOLDER"
-YAMLEOF
+    api_key: ${OPENROUTER_API_KEY}
+EOF
 
-sed -i "s/TOKEN_PLACEHOLDER/${TELEGRAM_BOT_TOKEN}/g" /opt/data/.hermes/config.yaml
-sed -i "s/CHATS_PLACEHOLDER/${TELEGRAM_ALLOWED_CHATS}/g" /opt/data/.hermes/config.yaml
-sed -i "s/KEY_PLACEHOLDER/${OPENROUTER_API_KEY}/g" /opt/data/.hermes/config.yaml
+echo "=== Config ==="
+cat /opt/data/.hermes/config.yaml
 
-echo "=== Config ===" | tee -a /opt/data/.hermes/startup.log
-cat /opt/data/.hermes/config.yaml | tee -a /opt/data/.hermes/startup.log
-
-echo "=== Starting gateway ===" | tee -a /opt/data/.hermes/startup.log
-exec /opt/venv/bin/hermes gateway start 2>&1 | tee -a /opt/data/.hermes/startup.log
+echo "=== Gateway start ==="
+exec /opt/venv/bin/hermes gateway start
