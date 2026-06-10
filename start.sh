@@ -1,8 +1,9 @@
 #!/bin/bash
 set -ex
 
-echo "=== Hermes Railway Startup ===" | tee /opt/data/.hermes/startup.log
 mkdir -p /opt/data/.hermes
+
+echo "=== Hermes Railway Startup ===" | tee /opt/data/.hermes/startup.log
 
 cat > /opt/data/.hermes/config.yaml << 'YAMLEOF'
 telegram:
@@ -24,9 +25,6 @@ sed -i "s/KEY_PLACEHOLDER/${OPENROUTER_API_KEY}/g" /opt/data/.hermes/config.yaml
 
 echo "=== Config ===" | tee -a /opt/data/.hermes/startup.log
 cat /opt/data/.hermes/config.yaml | tee -a /opt/data/.hermes/startup.log
-
-echo "=== Hermes version ===" | tee -a /opt/data/.hermes/startup.log
-/opt/venv/bin/hermes --version 2>&1 | tee -a /opt/data/.hermes/startup.log
 
 echo "=== Starting gateway ===" | tee -a /opt/data/.hermes/startup.log
 exec /opt/venv/bin/hermes gateway start 2>&1 | tee -a /opt/data/.hermes/startup.log
