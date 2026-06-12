@@ -5,16 +5,16 @@ mkdir -p /opt/data/.hermes
 
 # Generate .env file with API keys
 cat > /opt/data/.hermes/.env << EOF
-OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-EOF
+OPENROUTER_API_KEY=${OPEN...n
+# Generate config.yaml — read model from HERMES_MODEL env var, fallback to openrouter/owl-alpha
+HERMES_MODEL="${HERMES_MODEL:-openrouter/owl-alpha}"
 
-# Generate config.yaml
 cat > /opt/data/.hermes/config.yaml << EOF
 telegram:
   bot_token: ${TELEGRAM_BOT_TOKEN}
   allowed_chats: ${TELEGRAM_ALLOWED_CHATS}
 model:
-  default: openrouter/owl-alpha
+  default: ${HERMES_MODEL}
   provider: openrouter
 providers:
   openrouter:
