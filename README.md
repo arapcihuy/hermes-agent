@@ -1,3 +1,6 @@
+[![CodeQL](https://github.com/arapcihuy/hermes-agent/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/arapcihuy/hermes-agent/actions)
+
+
 <p align="center">
   <img src="assets/banner.png" alt="Hermes Agent" width="100%">
 </p>
