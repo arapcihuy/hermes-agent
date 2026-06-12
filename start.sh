@@ -3,13 +3,14 @@ set -ex
 
 mkdir -p /opt/data/.hermes
 
-# Generate .env file with API keys
-cat > /opt/data/.hermes/.env << EOF
-OPENROUTER_API_KEY=${OPEN...n
-# Generate config.yaml — read model from HERMES_MODEL env var, fallback to openrouter/owl-alpha
+# Generate .env — use printf to avoid heredoc expansion issues with special chars
+printf 'OPENROUTER_API_KEY=%s\n' "$OPENROUTER_API_KEY" > /opt/data/.hermes/.env
+
+# Set model from env var with fallback
 HERMES_MODEL="${HERMES_MODEL:-openrouter/owl-alpha}"
 
-cat > /opt/data/.hermes/config.yaml << EOF
+# Generate config.yaml
+cat > /opt/data/.hermes/config.yaml << CFGEOF
 telegram:
   bot_token: ${TELEGRAM_BOT_TOKEN}
   allowed_chats: ${TELEGRAM_ALLOWED_CHATS}
@@ -19,7 +20,7 @@ model:
 providers:
   openrouter:
     base_url: https://openrouter.ai/api/v1
-EOF
+CFGEOF
 
 echo "=== .env ==="
 cat /opt/data/.hermes/.env
