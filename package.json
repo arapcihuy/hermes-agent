@@ -1,6 +1,7 @@
 {
   "name": "hermes-railway",
   "version": "1.0.0",
+  "engines": { "node": ">=20.0.0" },
   "private": true,
   "engines": {
     "node": ">=20.0.0"
