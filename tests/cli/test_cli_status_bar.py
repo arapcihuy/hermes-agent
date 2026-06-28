@@ -400,13 +400,15 @@ class TestCLIStatusBar:
         cli_obj = _make_cli()
         cli_obj._spinner_text = "running tool"
 
-        # <60s path
-        cli_obj._tool_start_time = time.monotonic() - 9.2
-        short = cli_obj._render_spinner_text()
+        # Mock time.monotonic to ensure start times are not negative on a freshly booted CI runner
+        with patch("time.monotonic", return_value=1000.0):
+            # <60s path
+            cli_obj._tool_start_time = 1000.0 - 9.2
+            short = cli_obj._render_spinner_text()
 
-        # >=60s path
-        cli_obj._tool_start_time = time.monotonic() - 65.2
-        long = cli_obj._render_spinner_text()
+            # >=60s path
+            cli_obj._tool_start_time = 1000.0 - 65.2
+            long = cli_obj._render_spinner_text()
 
         short_elapsed = short.split("(", 1)[1].rstrip(")")
         long_elapsed = long.split("(", 1)[1].rstrip(")")
